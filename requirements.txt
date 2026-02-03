@@ -2,3 +2,10 @@ fastapi
 uvicorn
 python-decouple
 pydantic-settings
+flask 
+llama-index 
+langchain 
+qdrant-client 
+pypdf
+sentence-transformers
+langchain-groq
