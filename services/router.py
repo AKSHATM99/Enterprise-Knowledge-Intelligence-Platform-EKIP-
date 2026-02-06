@@ -15,8 +15,8 @@ def route_intent(query: str) -> Intent:
     ]):
         return Intent.DOCUMENT
 
-    if any(k in q for k in [
-        "count", "total", "sum", "average", "how many records"
+    elif any(k in q for k in [
+        "count", "total", "sum", "average", "how many records", "how many users"
     ]):
         return Intent.DATABASE
 

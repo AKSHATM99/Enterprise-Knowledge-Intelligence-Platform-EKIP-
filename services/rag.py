@@ -6,6 +6,8 @@ from decouple import config
 from services.router import route_intent, Intent
 from models.models import AskRequest
 from langchain_core.messages import HumanMessage, SystemMessage
+from services.sql_rag import sql_rag
+
 
 GROQ_API_KEY = config('GROQ_API_KEY', default=None)
 TOP_K = 3
@@ -54,11 +56,7 @@ class RAGService:
             }
         
         elif intent == Intent.DATABASE:
-            return {
-                "answer": "Database RAG not implemented yet.",
-                "sources": [],
-                "confidence": 0.0
-            }
+            return sql_rag(question)
         
         else: # For General Queries
             system_instruction = SystemMessage(content="You are a concise assistant. Provide answers in one or two sentences maximum.")

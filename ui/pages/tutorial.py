@@ -2,7 +2,7 @@ import streamlit as st
 
 # 1. Configuration - (MUST be at the very top of the file)
 # Note: In newer Streamlit versions, you can call this on subpages too!
-st.set_page_config(page_title="EKIP Dashboard", layout="wide")
+st.set_page_config(page_title="EKIP Tutorial", layout="wide")
 
 # 2. CSS to eliminate top margin (Your updated version)
 st.markdown("""

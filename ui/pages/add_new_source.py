@@ -7,6 +7,17 @@ if "active_source" not in st.session_state:
 # 1. Header & Official Icon Styles
 st.markdown("""
     <style>
+            /* --- REDUCE TOP MARGIN --- */
+        /* Targets the main content area */
+        .stAppViewBlockContainer {
+            padding-top: 0rem !important;
+            padding-bottom: 0rem !important;
+        }
+        
+        /* Removes the top gap of the first element */
+        .stMainBlockContainer {
+            margin-top: -30px !important;
+        }
         .gradient-text {
             font-size: 42px !important;
             font-weight: 700 !important;
@@ -48,6 +59,7 @@ st.markdown("""
             pointer-events: none; /* This allows mouse to click the button underneath */
             z-index: 10;
         }
+            
     </style>
     
     <div style="margin-top: -30px;">
@@ -60,10 +72,10 @@ st.markdown("""
 sources = [
     {"title": "PDF", "img": "https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg", "key": "pdf"},
     {"title": "Excel", "img": "https://cdn-icons-png.flaticon.com/512/732/732220.png", "key": "excel"},
+    {"title": "PostgreSQL", "img": "https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg", "key": "postgres"},
     {"title": "Google Drive", "img": "https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg", "key": "gdrive"},
     {"title": "Amazon S3", "img": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Amazon-S3-Logo.svg", "key": "s3"},
     {"title": "Azure Blob", "img": "https://www.vectorlogo.zone/logos/microsoft_azure/microsoft_azure-icon.svg", "key": "azure"},
-    {"title": "PostgreSQL", "img": "https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg", "key": "postgres"},
     {"title": "GitHub", "img": "https://www.vectorlogo.zone/logos/github/github-icon.svg", "key": "github"},
     {"title": "ServiceNow", "img": "https://www.vectorlogo.zone/logos/servicenow/servicenow-icon.svg", "key": "snow"},
     {"title": "Confluence", "img": "https://cdn-icons-png.flaticon.com/512/5968/5968793.png", "key": "conf"}

@@ -11,3 +11,13 @@
 - Vector search
 - Context-aware RAG
 - Source citations
+
+✔ FastAPI + Flask compatible backend
+✔ SQL RAG + Vector RAG
+✔ LangChain + LlamaIndex-style orchestration
+✔ Qdrant vector store
+✔ Evidence gating
+✔ Citation grounding
+✔ Confidence scoring
+✔ Hallucination detection
+✔ Query observability
