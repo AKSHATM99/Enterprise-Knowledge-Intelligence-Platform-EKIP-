@@ -1,54 +1,34 @@
-# from sentence_transformers import SentenceTransformer
-# from qdrant_client import QdrantClient
+import asyncio
+from langchain_groq import ChatGroq
+from langchain_core.messages import SystemMessage, HumanMessage
+from decouple import config
 
-# model = SentenceTransformer("all-MiniLM-L6-v2")
-# client = QdrantClient(host="localhost", port=6333)
+GROQ_API_KEY = config("GROQ_API_KEY")
 
-# q = "How many paid leaves are allowed?"
-# emb = model.encode(q).tolist()
+llm = ChatGroq(
+    model="llama-3.1-8b-instant",
+    temperature=0,
+    api_key=GROQ_API_KEY,
+)
+print("LOADED KEY:", GROQ_API_KEY)
 
-# res = client.search(
-#     collection_name="documents",
-#     query_vector=emb,
-#     limit=3
-# )
+async def chat(prompt: str):
+    messages = [
+        SystemMessage(content="You are a personal assistant. Always provide short answers."),
+        HumanMessage(content=prompt)
+    ]
 
-# for r in res:
-#     print(r.score)
-#     print(r)
-import requests
-import zipfile
-import os
+    async for chunk in llm.astream(messages):
+        if chunk.content:
+            print(chunk.content, end="", flush=True)
+            await asyncio.sleep(0.02)
 
-# The official vector links we selected
-logos = {
-    "amazon_s3.svg": "https://cdn.simpleicons.org/amazons3/white",
-    "google_drive.svg": "https://cdn.simpleicons.org/googledrive/white",
-    "github.svg": "https://cdn.simpleicons.org/github/white",
-    "excel.svg": "https://cdn.simpleicons.org/microsoftexcel/white",
-    "pdf.svg": "https://cdn.simpleicons.org/adobeacrobatreader/white",
-    "postgresql.svg": "https://cdn.simpleicons.org/postgresql/white",
-    "servicenow.svg": "https://cdn.simpleicons.org/servicenow/white",
-    "confluence.svg": "https://cdn.simpleicons.org/confluence/white",
-    "azure.svg": "https://cdn.simpleicons.org/microsoftazure/white"
-}
+while True:
+    print()
+    prompt = input("User -> ")
 
-zip_name = "ekip_logos.zip"
+    if prompt.lower() == "bye":
+        break
 
-print("🚀 Starting download...")
-
-with zipfile.ZipFile(zip_name, 'w') as zip_file:
-    for filename, url in logos.items():
-        try:
-            response = requests.get(url)
-            if response.status_code == 200:
-                # Write the content to a temporary file then add to zip
-                with open(filename, 'wb') as f:
-                    f.write(response.content)
-                zip_file.write(filename)
-                os.remove(filename) # Clean up local folder
-                print(f"✅ Added: {filename}")
-        except Exception as e:
-            print(f"❌ Failed to download {filename}: {e}")
-
-print(f"\n✨ Done! Your logos are ready in: {os.path.abspath(zip_name)}")
+    print()
+    asyncio.run(chat(prompt))

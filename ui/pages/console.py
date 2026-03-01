@@ -1,5 +1,6 @@
 import streamlit as st
 import httpx
+import os
 
 # --- Page Config ---
 st.set_page_config(page_title="EKIP Chat", page_icon="📄", layout="wide")
@@ -39,8 +40,8 @@ st.markdown("""
     <p class="subtitle-text">Chat with your knowledge base using high-performance vector search.</p>
     """, unsafe_allow_html=True)
 
-# Define your FastAPI endpoint
-FASTAPI_ENDPOINT = "http://localhost:8000/query/" # Update this to your real URL
+# Define your FastAPI endpoint (override in Docker with env var)
+FASTAPI_ENDPOINT = os.getenv("FASTAPI_ENDPOINT", "http://localhost:8000/query/")
 
 # Initialize chat history if it doesn't exist
 if "messages" not in st.session_state:

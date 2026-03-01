@@ -8,10 +8,9 @@ from models.models import AskRequest
 from langchain_core.messages import HumanMessage, SystemMessage
 from services.sql_rag import sql_rag
 
-
 GROQ_API_KEY = config('GROQ_API_KEY', default=None)
 TOP_K = 3
-MIN_SIMILARITY = 0.35   # tune later
+MIN_SIMILARITY = 0.35 
 
 
 class RAGService:
@@ -25,34 +24,34 @@ class RAGService:
                 )
 
     def answer(self, question: AskRequest):
-        query_vec = self.embedder.embed(question)
         intent = route_intent(question)
 
         if intent == Intent.DOCUMENT:
+            query_vec = self.embedder.embed(question)
             results = self.retriever.retrieve(query_vec, limit=TOP_K)
-            if not results or results[0].score < MIN_SIMILARITY:
+            if not results or results[0]["score"] < MIN_SIMILARITY:
                 return {
                     "answer": "I don't know",
                     "sources": [],
-                    "confidence": results[0].score if results else 0.0
+                    "confidence": results[0]["score"] if results else 0.0
                 }
+
             context = "\n\n".join(
-                r.payload.get("source", "") + ": " + r.payload.get("text", "")
+                f"{r['source']}: {r['text']}"
                 for r in results
             )
+
             prompt = RAG_PROMPT.format(
                 context=context,
                 question=question
             )
+
             response = self.llm.invoke(prompt)
-            sources = [
-                r.payload.get("source") for r in results
-            ]
-            confidence = results[0].score
+
             return {
                 "answer": response.content,
-                "sources": list(set(sources)),
-                "confidence": confidence
+                "sources": list(set(r["source"] for r in results)),
+                "confidence": results[0]["score"]
             }
         
         elif intent == Intent.DATABASE:
