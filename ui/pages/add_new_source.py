@@ -1,4 +1,5 @@
 import streamlit as st
+import httpx
 
 # Initialize session state for the active source
 if "active_source" not in st.session_state:
@@ -114,6 +115,19 @@ else:
         if uploaded_files:
             for file in uploaded_files:
                 st.write(f"✅ Filename: {file.name}")
+                files = {
+                    "file": (
+                        file.name,
+                        file.getvalue(),   # important
+                        "application/pdf"
+                    )
+                }
+                with httpx.Client(timeout=30) as client:
+                    resp = client.post(
+                        "http://127.0.0.1:5001/ingest/pdf",
+                        files=files
+                    )
+                st.write(resp.json())
 
     if selected=="s3":
         # To read the file:

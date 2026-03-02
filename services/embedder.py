@@ -1,5 +1,3 @@
-from groq import Groq
-from typing import List
 from decouple import config
 from sentence_transformers import SentenceTransformer
 

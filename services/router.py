@@ -20,4 +20,5 @@ def route_intent(query: str) -> Intent:
     ]):
         return Intent.DATABASE
 
-    return Intent.GENERAL
+    # return Intent.GENERAL
+    return Intent.DOCUMENT
