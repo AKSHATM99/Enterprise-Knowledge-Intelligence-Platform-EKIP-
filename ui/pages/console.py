@@ -41,7 +41,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # Define your FastAPI endpoint (override in Docker with env var)
-FASTAPI_ENDPOINT = os.getenv("FASTAPI_ENDPOINT", "http://localhost:8000/query/")
+FASTAPI_ENDPOINT = os.getenv("FASTAPI_ENDPOINT", "http://fastapi:8000/query/")
 
 # Initialize chat history if it doesn't exist
 if "messages" not in st.session_state:

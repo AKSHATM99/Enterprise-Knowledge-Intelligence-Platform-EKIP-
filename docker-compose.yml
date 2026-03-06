@@ -1,58 +1,69 @@
-version: "3.9"
-
 services:
 
   fastapi:
     build:
       context: .
-      dockerfile: ./api/Dockerfile
-    container_name: ekip-fastapi-service
+      dockerfile: api/Dockerfile
     ports:
-      - "8000:8000"
-    env_file:
-      - .env
-    volumes:
-      - ./data:/app/data
-    environment:
-      - QDRANT_HOST=qdrant
-      - QDRANT_PORT=6333
+      - "8000"
     depends_on:
       - qdrant
-    
-  flask:
-    build: ./ingestion
-    container_name: ekip-flask-service
-    ports:
-      - "5000:5000"
-    env_file:
-      - .env
-    volumes:
-      - ./data:/app/data
+      - ollama
     environment:
-      - QDRANT_HOST=qdrant
-      - QDRANT_PORT=6333
-    depends_on:
-      - qdrant
+      - GROQ_API_KEY=${GROQ_API_KEY}
 
-  ui:
-    build: ./ui
-    container_name: ekip-ui
+  flask:
+    build:
+      context: .
+      dockerfile: ingestion/Dockerfile
     ports:
-      - "8501:8501"
-    environment:
-      - FASTAPI_ENDPOINT=http://fastapi:8000/query/
+      - "5000"
     depends_on:
-      - fastapi
-      - flask
+      - qdrant
+      - ollama
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: ui/Dockerfile
+    ports:
+      - "8501"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.streamlit.rule=PathPrefix(`/`)"
+      - "traefik.http.services.streamlit.loadbalancer.server.port=8501"
+    depends_on:
+      - traefik
 
   qdrant:
     image: qdrant/qdrant:latest
-    container_name: ekip-qdrant
+    container_name: qdrant_db
     ports:
-      - "6333:6333"
+      - "6333"
     volumes:
       - qdrant_data:/qdrant/storage
-      
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama_service
+    ports:
+      - "11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    entrypoint: /bin/sh
+    command: -c "ollama serve & sleep 5 && ollama pull qwen3-embedding:0.6b && wait"
+
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 volumes:
   qdrant_data:
+  ollama_data:

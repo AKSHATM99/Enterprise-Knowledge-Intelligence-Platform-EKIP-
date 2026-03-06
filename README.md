@@ -21,3 +21,18 @@
 ✔ Confidence scoring
 ✔ Hallucination detection
 ✔ Query observability
+
+
+Architecture--
+----------------------
+
+            Internet
+                |
+                v
+        Traefik (port 80/443)
+                |
+                v
+          Streamlit (UI)
+                |
+                v
+FastAPI ----> Flask ----> Qdrant & Ollama

@@ -1,11 +1,9 @@
 from enum import Enum
 
-
 class Intent(str, Enum):
     DOCUMENT = "document"
     DATABASE = "database"
     GENERAL = "general"
-
 
 def route_intent(query: str) -> Intent:
     q = query.lower()

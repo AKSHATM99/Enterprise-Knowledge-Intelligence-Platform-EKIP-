@@ -1,3 +1,9 @@
 fastapi==0.134.0
 uvicorn==0.40.0
 python-decouple==3.8
+pydantic-settings==2.12.0
+pydantic
+ollama
+langchain
+httpx
+langchain_groq

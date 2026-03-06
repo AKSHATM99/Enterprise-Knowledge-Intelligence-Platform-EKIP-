@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
-from loaders.pdf_loader import load_pdf
-from services.embedder import Embedder
-from services.vector_store import VectorStore
+from ingestion.loaders.pdf_loader import load_pdf
+from ingestion.services.embedder import Embedder
+from ingestion.services.vector_store import VectorStore
 
 embedder = Embedder()
 vector_store = VectorStore()
@@ -11,7 +11,6 @@ app = Flask(__name__)
 def ingest_pdf():
     file = request.files.get("file")
     nodes = load_pdf(file)
-
     texts = [n.text for n in nodes]
     embeddings = embedder.embed(texts)
 
@@ -32,4 +31,4 @@ def health():
     return {"status": "ok"}
 
 if __name__ == "__main__":
-    app.run(port=5001)
+    app.run(host="0.0.0.0", port=5000)

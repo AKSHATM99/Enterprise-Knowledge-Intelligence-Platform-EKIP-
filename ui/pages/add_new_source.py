@@ -124,7 +124,7 @@ else:
                 }
                 with httpx.Client(timeout=30) as client:
                     resp = client.post(
-                        "http://127.0.0.1:5001/ingest/pdf",
+                        "http://flask:5000/ingest/pdf",
                         files=files
                     )
                 st.write(resp.json())

@@ -12,7 +12,6 @@ GROQ_API_KEY = config('GROQ_API_KEY', default=None)
 TOP_K = 3
 MIN_SIMILARITY = 0.35 
 
-
 class RAGService:
     def __init__(self):
         self.embedder = QueryEmbedder()

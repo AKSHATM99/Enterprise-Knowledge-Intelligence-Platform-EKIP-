@@ -1,14 +1,13 @@
 from typing import List
-from sentence_transformers import SentenceTransformer
-
+import ollama
 
 class Embedder:
-    def __init__(self) -> None:
-        self.model = SentenceTransformer("all-MiniLM-L6-v2")
+    def __init__(self):
+        self.client = ollama.Client(host="http://ollama:11434")
 
     def embed(self, texts: List[str]) -> List[List[float]]:
-        if isinstance(texts, str):
-            texts = [texts]
-
-        vectors = self.model.encode(texts, normalize_embeddings=True)
-        return vectors.tolist()
+        response = self.client.embed(
+            model="qwen3-embedding:0.6b",
+            input=texts
+        )
+        return response.embeddings

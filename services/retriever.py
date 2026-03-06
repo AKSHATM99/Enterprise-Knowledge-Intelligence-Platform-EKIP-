@@ -1,14 +1,12 @@
 import os
 from typing import Any, Dict, List
-
 import httpx
-
 
 class VectorRetriever:
     def __init__(self, collection: str = "documents") -> None:
-        host = os.getenv("QDRANT_HOST", "localhost")
-        port = int(os.getenv("QDRANT_PORT", "6333"))
-        self.base_url = f"http://{host}:{port}"
+        # host = os.getenv("QDRANT_HOST", "localhost")
+        # port = int(os.getenv("QDRANT_PORT", "6333"))
+        self.base_url = "http://qdrant:6333"
         self.collection = collection
 
     def retrieve(self, query_embedding: List[float], limit: int = 5) -> List[Dict[str, Any]]:
