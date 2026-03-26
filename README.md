@@ -1,4 +1,4 @@
-**Enterprise Knowledge Intelligence Platform (EKIP)**
+**Enterprise Knowledge Intelligence Platform (EKIP) {Under Development}**
 
 “Ask questions across internal documents, databases, APIs, and logs—with grounded, auditable answers.”
 
